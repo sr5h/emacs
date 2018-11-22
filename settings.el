@@ -27,12 +27,6 @@
 
 (ido-grid-mode 1)
 
-(require 'cl)
-(setq cycle-themes-theme-list
-'(exotica dracula))
-(require 'cycle-themes)
-(cycle-themes-mode)
-
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
@@ -61,4 +55,7 @@
 (global-set-key (kbd "C-M-z") 'replace-regex)
 (global-set-key (kbd "C-Z") 'count-matches)
 
-(load-theme 'exotica t)
+;;(load-theme 'exotica t)
+(load-theme 'sanityinc-tomorrow-bright t)
+;; (require 'color-theme-sanityinc-tomorrow)
+;; (color-theme-sanityinc-tomorrow--define-theme bright)

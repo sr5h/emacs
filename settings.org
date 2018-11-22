@@ -64,16 +64,6 @@
 (ido-grid-mode 1)
 #+END_SRC
 
-** cycle themes
-
-#+BEGIN_SRC emacs-lisp
-(require 'cl)
-(setq cycle-themes-theme-list
-'(exotica dracula))
-(require 'cycle-themes)
-(cycle-themes-mode)
-#+END_SRC
-
 ** org bullets
 
 #+BEGIN_SRC emacs-lisp
@@ -129,9 +119,11 @@
 * themes
 
 #+BEGIN_SRC emacs-lisp
-(load-theme 'exotica t)
+  (load-theme 'sanityinc-tomorrow-bright t)
 #+END_SRC
 
 ** exotica
 
 ** dracula
+
+** sanityinc-tomorrow
