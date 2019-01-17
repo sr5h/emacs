@@ -21,7 +21,17 @@
 
 ;; ----- ido-dir-file-cache -----
 (
- ("/Users/sroh/.emacs.d/" (23533 10360 511807 666000) "settings.el" "elpa/" "settings.org~" "history" "init.el" "auto-save-list/" "init.el~" "settings.org" "ido.last" "../" "./")
+ ("/Users/sroh/.emacs.d/" (23616 8126 419806 666000) "settings.el" ".git/" "elpa/" "recentf" "history" "init.el" "auto-save-list/" "settings.org" "ido.last" "snippets/" "../" "./")
+
+ ("/Users/sroh/Documents/TOOLS/" (23615 64202 0 0) "magit.pdf" "with-editor.pdf" "../" "./")
+
+ ("/Users/sroh/pg/SICP/3/" (23613 43423 776349 258000) ".#monte-carlo.lisp" "bank.lisp" "monte-carlo.lisp" "#monte-carlo.lisp#" "../" "./")
+
+ ("/Users/sroh/pg/SICP/" (23594 64844 779514 894000) "1.lsp" "#1.lsp#" ".#1.lsp" "../" "./")
+
+ ("/Users/sroh/Documents/LISP/" (23522 35981 0 0) "Paradigms of AI Programming.pdf" "GENTLE-INSTRODUCTION.pdf" "ANSI_Common_Lisp_-_Paul_Graham.pdf" "mcclim.pdf" "ccl.pdf" "lisp-book-figures.pdf" ".#Paradigms of AI Programming.pdf" "MOP.pdf" "Land.of.Lisp.pdf" "ccl2.pdf" "The-Art-of-the-Metaobject-Protocol.pdf" "onlisp.pdf" "onlisp2.pdf" ".DS_Store" "Automobile Ride, Handling, and Suspension Design.webarchive" "../" "./")
+
+ ("/Users/sroh/gtd/org/" (23554 11877 82127 308000) "gtd.org" ".#gtd.org" "calendar.org" "#gtd.org_archive#" ".#calendar.org" "inbox.org" "tickler.org" "someday.org" "habit.org" ".#gtd.org_archive" "gtd.org_archive" "#gtd.org#" "../" "./")
 
  ("/Users/sroh/.emacs.d/auto-save-list/" (23533 8621 353694 635000) ".saves-9321-SR5HMBA.local~" "../" "./")
 
