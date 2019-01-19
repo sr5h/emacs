@@ -21,11 +21,13 @@
 
 ;; ----- ido-dir-file-cache -----
 (
+ ("/Users/sroh/" (23617 36528 994265 631000) "common-lisp2/" "ccl-init.lisp" ".slime/" ".viminfo" ".bash_history" ".cache/" "Downloads/" ".Xauthority" "quicklisp2/" ".bzr.log" ".bash_profile" ".darcs/" "gtd/" "Documents/" ".slime-history.eld" "#a.el#" ".Trash/" ".Rapp.history" "Applications/" "Movies/" ".ssh/" "Public/" ".CrossWeb/" ".bash_sessions/" ".cups/" "pg/" ".elfeed/" ".emacs.d/" "ccl-init.lisp~" "Library/" "Desktop/" ".sly/" ".sly-mrepl-history" ".rnd" ".softforum/" ".saves/" "Pictures/" ".local/" ".adobe/" ".sbclrc" ".bash_profile~" ".emacs.d-20181115-backup/" ".subversion/" ".CFUserTextEncoding" "VirtualBox VMs/" ".npki_pkcs11.cnf" ".DS_Store" "Install/" ".vim/" "Music/" ".config/" "../" "./")
+
+ ("/Users/sroh/pg/SICP/3/" (23617 29253 36813 38000) "digital-circuits-practice.lisp" "digital-circuits-practice.lib" "digital-circuits.lisp" "digital-circuits-practice.fas" "bank.lisp" "digital-circuits-test.lisp" "util.fas" "util.lisp" "constraint-propagation.lib" "constraint-propagation.lisp" "monte-carlo.lisp" "queue.lisp" "constraint-propagation.fas" "table.lisp" "util.lib" "../" "./")
+
  ("/Users/sroh/.emacs.d/" (23616 8126 419806 666000) "settings.el" ".git/" "elpa/" "recentf" "history" "init.el" "auto-save-list/" "settings.org" "ido.last" "snippets/" "../" "./")
 
  ("/Users/sroh/Documents/TOOLS/" (23615 64202 0 0) "magit.pdf" "with-editor.pdf" "../" "./")
-
- ("/Users/sroh/pg/SICP/3/" (23613 43423 776349 258000) ".#monte-carlo.lisp" "bank.lisp" "monte-carlo.lisp" "#monte-carlo.lisp#" "../" "./")
 
  ("/Users/sroh/pg/SICP/" (23594 64844 779514 894000) "1.lsp" "#1.lsp#" ".#1.lsp" "../" "./")
 
@@ -36,8 +38,6 @@
  ("/Users/sroh/.emacs.d/auto-save-list/" (23533 8621 353694 635000) ".saves-9321-SR5HMBA.local~" "../" "./")
 
  ("/Users/sroh/.emacs.d/elpa/" (23533 6288 316143 965000) "exotica-theme-20180212.2329/" "dash-20180910.1856/" "cycle-themes-20150403.309/" "ido-grid-mode-20160122.1139/" "ido-grid-mode-readme.txt" "org-bullets-readme.txt" "cycle-themes-readme.txt" "exotica-theme-readme.txt" "ido-describe-bindings-20161023.1102/" "org-bullets-20180208.2343/" "archives/" "dracula-theme-20180710.1324/" "dracula-theme-readme.txt" "ido-describe-bindings-readme.txt" "../" "./")
-
- ("/Users/sroh/" (23532 65532 161460 803000) "common-lisp2/" "ccl-init.lisp" ".slime/" ".viminfo" ".bash_history" ".cache/" "Downloads/" ".Xauthority" "quicklisp2/" ".bzr.log" ".bash_profile" ".darcs/" "Documents/" ".slime-history.eld" ".Trash/" ".Rapp.history" "Applications/" "Movies/" ".ssh/" "Public/" ".CrossWeb/" ".bash_sessions/" ".cups/" ".emacs.d/" "ccl-init.lisp~" "Library/" "Desktop/" ".rnd" ".softforum/" ".saves/" "Pictures/" ".local/" ".adobe/" ".sbclrc" ".bash_profile~" ".emacs.d-20181115-backup/" ".subversion/" ".CFUserTextEncoding" "VirtualBox VMs/" ".npki_pkcs11.cnf" ".DS_Store" "Install/" ".vim/" "Music/" ".config/" "../" "./")
 )
 
 ;; ----- ido-unc-hosts-cache -----

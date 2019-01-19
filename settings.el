@@ -1,5 +1,8 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 
+(setq user-mail-address "sr5v@icloud.com")
+(setq user-full-name "sro")
+
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -75,7 +78,6 @@
 (display-battery-mode 1)
 (setq column-number-mode 1)
 (global-hl-line-mode 1)
-(electric-pair-mode 1)
 (show-paren-mode 1)
 (savehist-mode 1)
 (global-auto-revert-mode 1)
@@ -115,9 +117,14 @@
 (pdf-tools-install)
 (add-hook 'pdf-view-mode-hook (lambda ()
                                  (pdf-view-midnight-minor-mode)))
+(setq pdf-view-midnight-colors '("gray" . "black" ))
 
 (setq inferior-lisp-program "/usr/local/bin/clisp")
 (setq slime-contribs '(slime-fancy))
+
+(setq elfeed-feeds
+      '("http://planet.lisp.org/rss20.xml"
+        "http://planet.emacsen.org/atom.xml"))
 
 (global-set-key (kbd "C-?") 'hippie-expand)
 (global-set-key (kbd "C-z") 'replace-string)

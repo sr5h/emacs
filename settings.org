@@ -11,6 +11,9 @@
 * variables for modes
 
 #+BEGIN_SRC emacs-lisp
+(setq user-mail-address "sr5v@icloud.com")
+(setq user-full-name "sro")
+
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -244,6 +247,14 @@ Interactive DO.
 #+BEGIN_SRC emacs-lisp
 (setq inferior-lisp-program "/usr/local/bin/clisp")
 (setq slime-contribs '(slime-fancy))
+#+END_SRC
+
+** elfeed
+
+#+BEGIN_SRC emacs-lisp
+(setq elfeed-feeds
+      '("http://planet.lisp.org/rss20.xml"
+        "http://planet.emacsen.org/atom.xml"))
 #+END_SRC
 
 * keybindings
