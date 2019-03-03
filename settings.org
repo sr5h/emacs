@@ -17,9 +17,11 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
+(setq scroll-step            1
+      scroll-conservatively  10000)
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
-(set-face-attribute 'default nil :height 150 :family "Courier New")
+(set-face-attribute 'default nil :height 130 :family "Courier New")
 
 (setq inhibit-splash-screen t)
 (setq make-backup-files nil)
@@ -64,7 +66,7 @@ Interactive DO.
 
 *** code
 
-#+BEGIN_SRC emacs_lisp
+#+BEGIN_SRC emacs-lisp
 (winner-mode 1)
 #+END_SRC
 
@@ -72,9 +74,22 @@ Interactive DO.
 
 *** code
 
-#+BEGIN_SRC emacs_lisp
+#+BEGIN_SRC emacs-lisp
 (windmove-default-keybindings)
 #+END_SRC
+
+** aspell
+
+*** code
+
+#+BEGIN_SRC emacs-lisp
+(setq ispell-program-name "aspell")
+(add-hook 'lisp-mode-hook (lambda () (flyspell-mode)))
+(global-set-key (kbd "<f8>") 'ispell-word)
+;; (global-set-key (kbd "C-S-<f8>") 'flyspell-mode)
+(global-set-key (kbd "C-M-<f8>") 'flyspell-buffer)
+#+END_SRC
+
 * installted packages  
 
 ** ido describe binding
@@ -122,6 +137,8 @@ Interactive DO.
 
 #+BEGIN_SRC emacs-lisp
 (pdf-tools-install)
+
+                      
 (add-hook 'pdf-view-mode-hook (lambda ()
                                  (pdf-view-midnight-minor-mode)))
 (setq pdf-view-midnight-colors '("gray" . "black" ))                                 
@@ -143,6 +160,14 @@ Interactive DO.
         "http://planet.emacsen.org/atom.xml"
         "https://old.reddit.com/r/lisp/.rss?format=xml"
         "http://lispblog.xach.com/rss"))
+#+END_SRC
+
+** elpy
+#+BEGIN_SRC emacs-lisp
+  (elpy-enable)
+  (let ((path (shell-command-to-string "$SHELL -cl \"printf %s \\\"\\\$PATH\\\"\"")))
+    (setenv "PATH" path)
+    (setq exec-path (split-string path path-separator)))
 #+END_SRC
 
 * keybindings

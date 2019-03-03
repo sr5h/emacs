@@ -6,9 +6,11 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
+(setq scroll-step            1
+      scroll-conservatively  10000)
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
-(set-face-attribute 'default nil :height 150 :family "Courier New")
+(set-face-attribute 'default nil :height 130 :family "Courier New")
 
 (setq inhibit-splash-screen t)
 (setq make-backup-files nil)
@@ -37,6 +39,16 @@
 (setq ido-create-new-buffer 'always)
 (setq ido-file-extension-order '(".org" ".txt" ".csv"))
 
+(winner-mode 1)
+
+(windmove-default-keybindings)
+
+(setq ispell-program-name "aspell")
+(add-hook 'lisp-mode-hook (lambda () (flyspell-mode)))
+(global-set-key (kbd "<f8>") 'ispell-word)
+;; (global-set-key (kbd "C-S-<f8>") 'flyspell-mode)
+(global-set-key (kbd "C-M-<f8>") 'flyspell-buffer)
+
 (ido-grid-mode 1)
 
 (ivy-mode 1)
@@ -62,6 +74,8 @@
 (require 'magit)
 
 (pdf-tools-install)
+
+                      
 (add-hook 'pdf-view-mode-hook (lambda ()
                                  (pdf-view-midnight-minor-mode)))
 (setq pdf-view-midnight-colors '("gray" . "black" ))
@@ -76,6 +90,11 @@
         "http://planet.emacsen.org/atom.xml"
         "https://old.reddit.com/r/lisp/.rss?format=xml"
         "http://lispblog.xach.com/rss"))
+
+(elpy-enable)
+(let ((path (shell-command-to-string "$SHELL -cl \"printf %s \\\"\\\$PATH\\\"\"")))
+  (setenv "PATH" path)
+  (setq exec-path (split-string path path-separator)))
 
 (global-set-key (kbd "C-?") 'hippie-expand)
 (global-set-key (kbd "C-z") 'replace-string)
