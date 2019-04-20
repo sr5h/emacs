@@ -9,8 +9,7 @@
 (setq scroll-step            1
       scroll-conservatively  10000)
 
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
-(set-face-attribute 'default nil :height 130 :family "Courier New")
+(set-face-attribute 'default nil :height 120 :family "Source Code Pro")
 
 (setq inhibit-splash-screen t)
 (setq make-backup-files nil)
@@ -24,13 +23,23 @@
 (global-hl-line-mode 1)
 (show-paren-mode 1)
 (savehist-mode 1)
-(global-auto-revert-mode 1)
+(global-auto-revert-mode nil)
 (global-visual-line-mode 1)
+
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; (add-to-list 'default-frame-alist '(alpha . (85 . 50)))
+;; (add-to-list 'default-frame-alist '(alpha . (100 . 100)))
+
 (add-to-list 'default-frame-alist '(foreground-color . "gray"))
-(add-to-list 'default-frame-alist '(background-color . "black"))
-(add-to-list 'default-frame-alist '(cursor-color . "red3"))
+(add-to-list 'default-frame-alist '(background-color . "black")) (add-to-list 'default-frame-alist '(cursor-color . "red3"))
 
 (global-set-key (kbd "<f12>") 'other-frame)
+
+(global-unset-key (kbd "C-/"))
+
+(setq-default truncate-lines t)
+
+()
 
 (ido-mode 1)
 (setq ido-everywhere t)
@@ -41,10 +50,11 @@
 
 (winner-mode 1)
 
-(windmove-default-keybindings)
+(windmove-default-keybindings '(control meta))
 
 (setq ispell-program-name "aspell")
 (add-hook 'lisp-mode-hook (lambda () (flyspell-mode)))
+(add-hook 'text-mode-hook (lambda () (flyspell-mode)))
 (global-set-key (kbd "<f8>") 'ispell-word)
 ;; (global-set-key (kbd "C-S-<f8>") 'flyspell-mode)
 (global-set-key (kbd "C-M-<f8>") 'flyspell-buffer)
@@ -80,7 +90,8 @@
                                  (pdf-view-midnight-minor-mode)))
 (setq pdf-view-midnight-colors '("gray" . "black" ))
 
-(setq inferior-lisp-program "/usr/local/bin/clisp")
+(load (expand-file-name "~/quicklisp/slime-helper.el"))
+(setq inferior-lisp-program "/usr/local/bin/sbcl")
 (setq slime-contribs '(slime-fancy))
 (add-hook 'inferior-lisp-mode-hook
     (lambda () (inferior-slime-mode t)))
@@ -96,7 +107,13 @@
   (setenv "PATH" path)
   (setq exec-path (split-string path path-separator)))
 
+(require 'multiple-cursors)
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+;; (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+
 (global-set-key (kbd "C-?") 'hippie-expand)
 (global-set-key (kbd "C-z") 'replace-string)
-(global-set-key (kbd "C-M-z") 'replace-regex)
+(global-set-key (kbd "C-M-z") 'replace-regexp)
 (global-set-key (kbd "C-Z") 'count-matches)
