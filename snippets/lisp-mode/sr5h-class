@@ -1,0 +1,27 @@
+# -*- mode: snippet -*-
+# contributor: sro
+# name: sr5h-class
+# key: make-
+# --
+(defun make-$1 ()
+  (let (($2 ($3)))
+
+    (lambda (message)
+      (case message
+
+	((initialize) (lambda (self)
+                        (declare (ignore self))	      
+	                (ask %super-class 'initialize)))
+	
+	((type) (lambda (self)
+		  (declare (ignore self))	
+		  (extend-type '$1 $2)))
+	
+	((is-a) (lambda (self type)
+		  (member type (ask self 'type))))
+	
+	((destroy) (lambda (self)
+                     (declare (ignore self))
+		     (ask %super-class 'destroy)))
+
+	(t (get-method message $2))))))
