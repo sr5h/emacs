@@ -1,4 +1,4 @@
-#+STARTUP:+ indent
+#+STARTUP: content
 
 * packages
 
@@ -18,71 +18,76 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
-(setq scroll-step            1
-      scroll-conservatively  10000)
-
-(set-face-attribute 'default nil :height 130 :family "Fixed")
-
 (setq inhibit-splash-screen t)
-(setq make-backup-files nil)
+
 (global-linum-mode 1)
 (add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1)))
 
-(defalias 'yes-or-no-p 'y-or-n-p)
 (display-time-mode 1)
 (display-battery-mode 1)
 (setq column-number-mode 1)
-(global-hl-line-mode 1)
+
 (show-paren-mode 1)
+(global-visual-line-mode 1)
+
+(setq scroll-step            1
+      scroll-conservatively  10000)
+
+
+(setq make-backup-files nil)
+
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+(global-hl-line-mode 1)
+
 (savehist-mode 1)
 (global-auto-revert-mode nil)
-(global-visual-line-mode 1)
+
+(set-face-attribute 'default nil :height 130 :family "Fixed")
 
 (add-to-list 'default-frame-alist '(alpha . (85 . 85)))
 (add-to-list 'default-frame-alist '(width . 95))
 (add-to-list 'default-frame-alist '(height . 60))
-    
-  
+
+
 (add-to-list 'default-frame-alist '(foreground-color . "#ffe97a"))
-(add-to-list 'default-frame-alist '(background-color . "#002b00")) 
+(add-to-list 'default-frame-alist '(background-color . "#002b00"))
 (add-to-list 'default-frame-alist '(cursor-color . "red3"))
+
+(when (memq window-system '(mac ns))
+  (add-to-list 'default-frame-alist '(ns-appearance . dark)) ; nil for dark text
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t)))
+
+(setq frame-title-format
+      '("" invocation-name ": "(:eval (if (buffer-file-name)
+                                          (abbreviate-file-name (buffer-file-name))
+                                        "%b"))))
 
 (global-set-key (kbd "<f10>") 'sr5h-slime)
 (global-set-key (kbd "C-<f10>") 'sr5h-kill-slime)
 (global-set-key (kbd "<f11>") 'ns-prev-frame)
 (global-set-key (kbd "<f12>") 'sr5h-select-slime-repl)
-      
+
+
 
 (global-unset-key (kbd "C-/"))
 
 (add-hook 'prog-mode-hook (lambda ()
                             (hs-minor-mode t)
-                            (company-mode)
                             (font-lock-add-keywords nil
-                                                    '(("\\<\\(FIXME\\|TODO\\|BUG\\|MODIFY\\):" 
-                                                    1 
-                                                    font-lock-warning-face 
-                                                    t)))))
-
+                                                    '(("\\<\\(FIXME\\|TODO\\|BUG\\|MODIFY\\):"
+                                                       1
+                                                       font-lock-warning-face
+                                                       t)))))
 (setq ns-function-modifier 'hyper)
-
-(setq frame-title-format
-  '("" invocation-name ": "(:eval (if (buffer-file-name)
-                                      (abbreviate-file-name (buffer-file-name))
-                                      "%b"))))
 
 (global-ede-mode 1)
 (semantic-mode 1)
+
 (setq-default buffer-file-coding-system 'utf-8-unix)
+
 (setq show-paren-delay 0)
-(when (memq window-system '(mac ns))
-  (add-to-list 'default-frame-alist '(ns-appearance . dark)) ; nil for dark text
-  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t)))
-  
-(defun transparency (value)
-  "Sets the transparency of the frame window. 0=transparent/100=opaque"
-  (interactive "nTransparency Value 0 - 100 opaque:")
-  (set-frame-parameter (selected-frame) 'alpha value))
+
 (setq lisp-loop-forms-indentation 2)
 
 ;;keep cursor at same position when scrolling
@@ -90,9 +95,19 @@
 ;;scroll window up/down by one line
 (global-set-key (kbd "C-{") (kbd "C-u 1 M-v"))
 (global-set-key (kbd "C-}") (kbd "C-u 1 C-v"))
-   
-(setq-default truncate-lines t)
+
+;; (setq-default truncate-lines nil)		; not work?
+;; (setq truncate-lines t)
 (setq-default truncate-partial-width-windows nil)
+
+(global-set-key (kbd "H-4") 'toggle-truncate-lines)
+
+(setq compilation-window-height 15)
+
+
+(add-hook 'before-save-hook 'whitespace-cleanup)
+(setq-default fill-column 90)
+(setq fill-column 90)
 
 #+END_SRC
 
@@ -145,14 +160,57 @@ Interactive DO.
 (global-set-key (kbd "C-M-<f8>") 'flyspell-buffer)
 #+END_SRC
 
-* installed packages  
+** re-builder
+
+*** code
+#+BEGIN_SRC emacs-lisp
+(setq reb-re-syntax 'string)
+(setq reb-auto-match-limit nil)
+#+END_SRC
+
+** org-mode
+
+*** code
+#+BEGIN_SRC emacs-lisp
+(setq org-src-window-setup 'other-window)
+(setq org-src-tab-acts-natively t)
+(setq org-edit-src-content-indentation 0)
+
+(setq org-fontify-quote-and-verse-blocks t) ; how works?
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (lisp . t)
+   (C . t)))
+
+(setq org-confirm-babel-evaluate nil)
+
+;; for future
+;; (add-to-list 'org-src-lang-modes
+;;              '("html" . web))
+
+(setq org-hide-emphasis-markers t)
+
+(add-hook 'org-mode-hook (lambda ()
+                           (auto-fill-mode t)
+                           (org-indent-mode t)))
+
+(setq org-startup-with-inline-images t)
+(setq org-fontify-whole-heading-line t)	; how works?
+#+END_SRC
+
+* installed packages
 
 ** ido describe binding
-
+#+BEGIN_SRC emacs-lisp
+(define-key help-map (kbd "b") 'ido-describe-bindings)
+#+END_SRC
 ** ido grid mode
 
 #+BEGIN_SRC emacs-lisp
 (ido-grid-mode 1)
+;; (setq ido-grid-mode-start-collapsed t)
 #+END_SRC
 
 ** ivy + swiper + counsel
@@ -160,7 +218,7 @@ Interactive DO.
 *** description
 
 *** codes
-    
+
 #+BEGIN_SRC emacs-lisp
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
@@ -181,9 +239,9 @@ Interactive DO.
   (global-set-key (kbd "C-x l") 'counsel-locate)
   ;; (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
-#+END_SRC 
+#+END_SRC
 
-** magit 
+** magit
 #+BEGIN_SRC emacs-lisp
 (require 'magit)
 #+END_SRC
@@ -193,32 +251,32 @@ Interactive DO.
 #+BEGIN_SRC emacs-lisp
 (pdf-tools-install)
 
-                      
+
 (add-hook 'pdf-view-mode-hook (lambda ()
-                                 (pdf-view-midnight-minor-mode)))
+                                (pdf-view-midnight-minor-mode)))
 (setq pdf-view-midnight-colors '("gray" . "black"))
 #+END_SRC
 
 ** slime
 #+BEGIN_SRC emacs-lisp
-(load (expand-file-name "~/quicklisp/slime-helper.el"))
-(setq inferior-lisp-program "/usr/local/bin/sbcl")
-(setq slime-contribs '(slime-fancy
-                           slime-sprof slime-mdot-fu slime-fontifying-fu
-                           slime-compiler-notes-tree slime-hyperdoc
-                           slime-indentation slime-repl slime-macrostep))
-(add-hook 'inferior-lisp-mode-hook
-    (lambda () (inferior-slime-mode t)))
-(setq slime-auto-select-connection 'always)
-(setq slime-kill-without-query-p t)
-(setq slime-description-autofocus t)
-(setq slime-repl-history-remove-duplicates t)
-(setq slime-repl-history-trim-whitespaces t)
-(setq  lisp-indent-function 'common-lisp-indent-function)
+  (load (expand-file-name "~/quicklisp/slime-helper.el"))
+  (setq inferior-lisp-program "/usr/local/bin/sbcl")
+  (setq slime-contribs '(slime-fancy
+                         slime-sprof slime-mdot-fu slime-fontifying-fu
+                         slime-compiler-notes-tree slime-hyperdoc
+                         slime-indentation slime-repl slime-macrostep))
+  (add-hook 'inferior-lisp-mode-hook
+            (lambda () (inferior-slime-mode t)))
+  (setq slime-auto-select-connection 'always)
+  (setq slime-kill-without-query-p t)
+  (setq slime-description-autofocus t)
+  (setq slime-repl-history-remove-duplicates t)
+  (setq slime-repl-history-trim-whitespaces t)
+  (setq  lisp-indent-function 'common-lisp-indent-function)
 
-(global-set-key (kbd "C-c s") 'slime-selector)
-(add-hook 'slime-inspector-mode-hook
-          (lambda () (define-key slime-inspector-mode-map (kbd ",") #'slime-inspector-pop)))
+  (global-set-key (kbd "C-c s") 'slime-selector)
+  (add-hook 'slime-inspector-mode-hook
+            (lambda () (define-key slime-inspector-mode-map (kbd ",") #'slime-inspector-pop)))
 #+END_SRC
 
 ** elfeed
@@ -228,15 +286,16 @@ Interactive DO.
       '("http://planet.lisp.org/rss20.xml"
         "http://planet.emacsen.org/atom.xml"
         "https://old.reddit.com/r/lisp/.rss?format=xml"
-        "http://lispblog.xach.com/rss"))
+        "http://lispblog.xach.com/rss"
+        "https://endlessparentheses.com/atom.xml"))
 #+END_SRC
 
 ** elpy
 #+BEGIN_SRC emacs-lisp
-  (elpy-enable)
-  (let ((path (shell-command-to-string "$SHELL -cl \"printf %s \\\"\\\$PATH\\\"\"")))
-    (setenv "PATH" path)
-    (setq exec-path (split-string path path-separator)))
+(elpy-enable)
+(let ((path (shell-command-to-string "$SHELL -cl \"printf %s \\\"\\\$PATH\\\"\"")))
+  (setenv "PATH" path)
+  (setq exec-path (split-string path path-separator)))
 #+END_SRC
 
 ** multiple-cursors
@@ -315,8 +374,15 @@ Interactive DO.
 ** company-glsl
 #+BEGIN_SRC emacs-lisp
 (when (executable-find "glslangValidator")
-    (add-to-list 'company-backends 'company-glsl))
+  (add-to-list 'company-backends 'company-glsl))
 #+END_SRC
+
+** company-mode
+#+BEGIN_SRC emacs-lisp
+(add-hook 'prog-mode-hook (lambda () (company-mode)))
+(setq company-tooltip-align-annotations t)
+#+END_SRC
+
 * keybindings
 
 ** codes
@@ -330,6 +396,6 @@ Interactive DO.
 ** codes
 
 #+BEGIN_SRC emacs-lisp
-;; TODO: 
-(load "~/.emacs.d/sr5h.el")
+;; TODO:
+;; (load "~/.emacs.d/sr5h.el")
 #+END_SRC
