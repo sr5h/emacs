@@ -1,7 +1,22 @@
 #+STARTUP: content
 
+* key-binding
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "<f9>") 'sr5h-select-main-frame)
+(global-set-key (kbd "<f10>") 'sr5h-slime)
+(global-set-key (kbd "C-<f10>") 'sr5h-kill-slime)
+(global-set-key (kbd "<f12>") 'sr5h-select-slime-repl)
+(global-set-key (kbd "s-<f10>") 'sr5h-make-frame)
+;; C-= is er/expand-region
+(global-set-key (kbd "C-+") 'sr5h-region-parentheses)
+
+(define-key slime-mode-indirect-map
+    (kbd "C-c C-p") 'sr5h-slime-pprint-eval-last-expression)
+
+#+END_SRC
 * make frame
 make new frame at specified position
+
 ** codes
 #+BEGIN_SRC emacs-lisp
 (defun sr5h-make-frame (&optional parameters)
@@ -14,23 +29,24 @@ make new frame at specified position
       (make-frame (list alist)))))
 #+END_SRC
 
-* related to slime
+* slime
+
 ** codes
 #+BEGIN_SRC emacs-lisp
-(defun sr5h-select-slime-repl ()
-  (interactive)
-  (select-frame-by-name "Emacs: *slime-repl sbcl*"))
+(let ((repl-frame nil))
+  (defun sr5h-select-slime-repl ()
+    (interactive)
+    (select-frame repl-frame)
+    (raise-frame))
 
-;; TODO: how to get frame?
-(let ((frame nil))
   (defun sr5h-slime ()
     (interactive)
-    (setf frame (sr5h-make-frame '((background-color . "black")
-                                   (foreground-color . "white")
-                                   (left . 1000)                ; value of left is arbitrary.
-                                   (height . 15)
-                                   (width . 60)
-                                   (alpha 85 . 85))))
+    (setq repl-frame (sr5h-make-frame '((background-color . "black")
+                                                (foreground-color . "white")
+                                                (left . 1000)                ; value of left is arbitrary.
+                                                (height . 15)
+                                                (width . 60)
+                                                (alpha 85 . 85))))
     (slime)
 
     (make-thread (lambda ()
@@ -46,6 +62,78 @@ make new frame at specified position
           (current-frame (selected-frame)))
       (if repl-buf (kill-buffer repl-buf))
       (if inf-buf (kill-buffer inf-buf))
-      (delete-frame frame)
+      (if repl-frame (delete-frame repl-frame))
       (select-frame current-frame))))
+#+END_SRC
+
+* region-parenthesis
+
+** codes
+#+BEGIN_SRC emacs-lisp
+(defun sr5h-region-parentheses ()
+  (interactive)
+  (kill-region (region-beginning) (region-end))
+  (insert "(")
+  (yank)
+  (insert ")")
+  (backward-sexp)
+  (forward-char))
+#+END_SRC
+
+* proced
+
+** codes
+#+BEGIN_SRC emacs-lisp
+(let ((frame nil))
+  (defun sr5h-proced ()
+    (interactive)
+    (setq frame (sr5h-make-frame '((background-color . "#00002b") ;#00002b
+                                   (foreground-color . "#fff4c0")
+                                   (top . 612)
+                                   (left . 777)
+                                   (height . 10)
+                                   (width . 95)
+                                   (alpha 85 . 85))))
+
+    (set-default 'proced-format 'verbose)
+    (set-default 'proced-filter 'emacs)
+    (proced)
+    (proced-toggle-auto-update t)
+
+    (delete-other-windows))
+
+  (defun sr5h-kill-proced ()
+    (interactive)
+    (let ((proced-buf (get-buffer "*Proced*"))
+          (current-frame (selected-frame)))
+      (if proced-buf (kill-buffer proced-buf))
+      (if frame (delete-frame frame))
+      (select-frame current-frame))))
+#+END_SRC
+
+* select main frame
+
+** code
+#+BEGIN_SRC emacs-lisp
+(defun sr5h-select-main-frame ()
+  (interactive)
+  (let* ((window (get-buffer-window "synchronous-idle.lisp" t))
+         (frame (window-frame window)))
+    (select-frame-set-input-focus frame)))
+#+END_SRC
+
+* slime-description buffer
+
+** code
+#+BEGIN_SRC emacs-lisp
+;; slime-pprint-eval-last-expression
+(defun sr5h-slime-pprint-eval-last-expression ()
+  (interactive)
+  (let ((window (get-buffer-window)))
+    (slime-pprint-eval-last-expression)
+    (make-thread (lambda ()
+                   (while (not (equal (buffer-name (window-buffer (selected-window)))
+                                      "*slime-description*"))
+                     (thread-yield))
+                   (delete-window)))))
 #+END_SRC

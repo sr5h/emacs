@@ -41,7 +41,7 @@
 (global-hl-line-mode 1)
 
 (savehist-mode 1)
-(global-auto-revert-mode nil)
+(global-auto-revert-mode 0)
 
 (set-face-attribute 'default nil :height 130 :family "Fixed")
 
@@ -59,16 +59,16 @@
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t)))
 
 (setq frame-title-format
-      '("" invocation-name ": "(:eval (if (buffer-file-name)
-                                          (abbreviate-file-name (buffer-file-name))
-                                        "%b"))))
+      ;; '("" ;; invocation-name ": "
+      ;;   (:eval (if (buffer-file-name)
+      ;;              (abbreviate-file-name (buffer-file-name))
+      ;;            "%b")))
+      nil)
 
-(global-set-key (kbd "<f10>") 'sr5h-slime)
-(global-set-key (kbd "C-<f10>") 'sr5h-kill-slime)
-(global-set-key (kbd "<f11>") 'ns-prev-frame)
-(global-set-key (kbd "<f12>") 'sr5h-select-slime-repl)
+(setq ns-use-proxy-icon nil)
 
-
+(global-set-key (kbd "C-c 9") 'ns-next-frame)
+(global-set-key (kbd "C-c 0") 'ns-prev-frame)
 
 (global-unset-key (kbd "C-/"))
 
@@ -108,7 +108,19 @@
 (add-hook 'before-save-hook 'whitespace-cleanup)
 (setq-default fill-column 90)
 (setq fill-column 90)
+(setq ring-bell-function 'ignore)
 
+(set-face-attribute 'mode-line nil
+                    :foreground "#002b00" :background "#ffe97a"
+                    :inverse-video nil
+                    :box '(:color "grey25" :style nil))
+
+(set-face-attribute 'mode-line-inactive nil
+                    :foreground "grey" :background "grey20"
+                    :inverse-video nil
+                    :box '(:color "grey20" :style nil))
+
+(setq debugger-stack-frame-as-list t)
 #+END_SRC
 
 ** ido
@@ -153,7 +165,8 @@ Interactive DO.
 #+BEGIN_SRC emacs-lisp
 (setq ispell-program-name "aspell")
 (add-hook 'lisp-mode-hook (lambda () (flyspell-mode)
-                                     (company-mode)))
+                                  (company-mode)
+                                  ))
 (add-hook 'text-mode-hook (lambda () (flyspell-mode)))
 (global-set-key (kbd "<f8>") 'ispell-word)
 ;; (global-set-key (kbd "C-S-<f8>") 'flyspell-mode)
@@ -198,6 +211,18 @@ Interactive DO.
 
 (setq org-startup-with-inline-images t)
 (setq org-fontify-whole-heading-line t)	; how works?
+#+END_SRC
+
+** lisp-mode
+
+*** code
+#+BEGIN_SRC emacs-lisp
+(setq  lisp-indent-function 'common-lisp-indent-function)
+(put 'define-class 'common-lisp-indent-function
+     '(2 2 (&whole 2 &rest) (&whole 2 &rest (&whole 1 &lambda &body)) &body))
+;; TODO:
+(setf (get 'cond 'common-lisp-indent-function)
+      '(&rest (&whole 2 &rest 1)))
 #+END_SRC
 
 * installed packages
@@ -259,24 +284,54 @@ Interactive DO.
 
 ** slime
 #+BEGIN_SRC emacs-lisp
-  (load (expand-file-name "~/quicklisp/slime-helper.el"))
-  (setq inferior-lisp-program "/usr/local/bin/sbcl")
-  (setq slime-contribs '(slime-fancy
-                         slime-sprof slime-mdot-fu slime-fontifying-fu
-                         slime-compiler-notes-tree slime-hyperdoc
-                         slime-indentation slime-repl slime-macrostep))
-  (add-hook 'inferior-lisp-mode-hook
-            (lambda () (inferior-slime-mode t)))
-  (setq slime-auto-select-connection 'always)
-  (setq slime-kill-without-query-p t)
-  (setq slime-description-autofocus t)
-  (setq slime-repl-history-remove-duplicates t)
-  (setq slime-repl-history-trim-whitespaces t)
-  (setq  lisp-indent-function 'common-lisp-indent-function)
+(load (expand-file-name "~/quicklisp/slime-helper.el"))
+(setq inferior-lisp-program "/usr/local/bin/sbcl")
+(slime-setup '(;; slime-fancy
+               slime-repl slime-asdf slime-company slime-macrostep
+               slime-compiler-notes-tree slime-hyperdoc slime-sprof slime-mdot-fu
+               slime-fontifying-fu
+               slime-sbcl-exts))
+;; (slime-setup '(slime-repl slime-asdf slime-company slime-macrostep
+;;                slime-compiler-notes-tree slime-hyperdoc slime-sprof slime-mdot-fu
+;;                slime-fontifying-fu
+;;                slime-editing-commands
+;;                slime-enclosing-context
+;;                slime-fancy-inspector
+;;                slime-fancy-trace
+;;                slime-fuzzy
+;;                slime-highlight-edits
+;;                slime-listener-hooks
+;;                slime-autodoc               slime-c-p-c
+;;                slime-package-fu
+;;                slime-parse
+;;                slime-quicklisp
+;;                slime-references
+;;                slime-sbcl-exts
+;;                slime-trace-dialog
+;;                slime-xref-browser
+;;                ))
+;; (setq slime-contribs '(slime-fancy
+;;
+;;
+;;                        slime-autodoc
+;;                        ;; slime-indentation
+;;                        slime-repl ))
+(add-hook 'inferior-lisp-mode-hook
+          (lambda () (inferior-slime-mode t)))
+(setq slime-auto-select-connection 'always)
+(setq slime-kill-without-query-p t)
+(setq slime-description-autofocus t)
+(setq slime-repl-history-remove-duplicates t)
+(setq slime-repl-history-trim-whitespaces t)
 
-  (global-set-key (kbd "C-c s") 'slime-selector)
-  (add-hook 'slime-inspector-mode-hook
-            (lambda () (define-key slime-inspector-mode-map (kbd ",") #'slime-inspector-pop)))
+(global-set-key (kbd "C-c s") 'slime-selector)
+(add-hook 'slime-inspector-mode-hook
+          (lambda () (define-key slime-inspector-mode-map (kbd ",")
+ #'slime-inspector-pop)))
+
+;; (slime-autodoc-mode t)
+(setq slime-lisp-implementaations
+      '((sbcl ("sbcl") :coding-system utf-8-unix)))
 #+END_SRC
 
 ** elfeed
@@ -359,7 +414,7 @@ Interactive DO.
 
 ** slime-company
 #+BEGIN_SRC emacs-lisp
-(slime-setup '(slime-company))
+
 (define-key company-active-map (kbd "C-p") 'company-select-previous)
 (define-key company-active-map (kbd "C-n") 'company-select-next)
 (define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
@@ -375,6 +430,7 @@ Interactive DO.
 #+BEGIN_SRC emacs-lisp
 (when (executable-find "glslangValidator")
   (add-to-list 'company-backends 'company-glsl))
+
 #+END_SRC
 
 ** company-mode
@@ -383,19 +439,31 @@ Interactive DO.
 (setq company-tooltip-align-annotations t)
 #+END_SRC
 
+** emms
+
+#+BEGIN_SRC emacs-lisp
+(require 'emms-setup)
+(emms-all)
+(emms-default-players)
+;; (setq emms-player-list '(emms-player-mplayer))
+;; (setq emms-source-file-default-directory "~/Music/Programming/")
+;; (emms-add-directory-tree "~/Music/Programming/")
+(setq emms-mode-line-titlebar-function nil)
+#+END_SRC
+
 * keybindings
 
 ** codes
 
 #+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "C-?") 'hippie-expand)
+(global-set-key (kbd "C-c e p") 'eval-print-last-sexp)
 #+END_SRC
 
 * custom el
 
 ** codes
-
 #+BEGIN_SRC emacs-lisp
 ;; TODO:
-;; (load "~/.emacs.d/sr5h.el")
+;; (toggle-debug-on-error)
 #+END_SRC
